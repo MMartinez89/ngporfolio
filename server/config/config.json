@@ -1,0 +1,35 @@
+{
+    "development": {
+        "username": "postgres",
+        "password": "Mina2018",
+        "database": "postgres",
+        "host": "localhost",
+        "dialect": "postgres",
+        "port": 5432,
+        "operatorsAliases": false,
+        "logging": true,
+        "ssl": false
+    },
+    "test": {
+        "username": "postgres",
+        "password": "Mina2018",
+        "database": "porfolio_test",
+        "host": "127.0.0.1",
+        "dialect": "postgres",
+        "port": 5432,
+        "operatorsAliases": false,
+        "logging": false,
+        "ssl": false
+    },
+    "production": {
+        "username": "postgres",
+        "password": "Mina2018",
+        "database": "porfolio_production",
+        "host": "127.0.0.1",
+        "dialect": "postgres",
+        "port": 5432,
+        "operatorsAliases": false,
+        "logging": false,
+        "ssl": true
+    }
+}
