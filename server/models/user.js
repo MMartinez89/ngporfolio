@@ -1,53 +1,61 @@
-'use strict';
+'use strict'
+const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
-    //1=ADMIN 2=CLIENTE 
-    const validRoles = [1, 2]
-    const User = sequelize.define('User', {
+    class User extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+            // 1:M
+            User.hasMany(models.Skill, {
+                foreignKey: "UserId"
+            })
+        }
+    }
+    User.init({
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true,
         },
         firstname: {
-            type: DataTypes.STRING(30),
+            type: DataTypes.STRING,
             allowNull: false,
         },
         lastname: {
-            type: DataTypes.STRING(30),
+            type: DataTypes.STRING,
             allowNull: false,
         },
         email: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.STRING,
             allowNull: false,
             lowercase: true,
+            trim: true,
             validate: {
-                isEmail: true
+                isEmail: true,
             },
             unique: {
                 args: true,
-                msg: 'El email no esta disponible, elija otro!'
-            }
+                msg: 'El email no esta disponible, elija otro!',
+            },
         },
         password: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.STRING,
             allowNull: false,
+        },
+        img: {
+            type: DataTypes.STRING,
+            allowNull: true,
         },
         is_verified: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            default: false
-        },
-        img: {
-            type: DataTypes.STRING(100),
-            allowNull: true,
-        },
-        role: {
-            type: DataTypes.INTEGER,
-            values: validRoles,
-            defaultValues: 2
         },
         reset_password_token: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.STRING,
             allowNull: true,
         },
         reset_password_expires: {
@@ -57,18 +65,20 @@ module.exports = (sequelize, DataTypes) => {
         active: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: true,
         },
         createdAt: {
-            allowNull: false,
             type: DataTypes.DATE,
+            allowNull: false,
         },
         updatedAt: {
-            allowNull: true,
             type: DataTypes.DATE,
+            allowNull: true,
         },
-    }, {});
-    User.associate = function(models) {
-        // associations can be defined here
-    };
-    return User;
-};
+
+    }, {
+        sequelize,
+        modelName: 'User',
+    }, )
+    return User
+}
