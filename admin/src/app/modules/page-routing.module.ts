@@ -3,13 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UsersModule } from './admin/users/users.module';
 import { RolesModule } from './admin/roles/roles.module';
+import { VerifyTokenGuard } from '../core/guards/verify-token.guard';
+
 
 
 const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    // canActivate: [VerifyTokenGuard],
+    canActivate: [VerifyTokenGuard],
     data: { titulo: 'Dashboard'}
   },
   {
@@ -24,8 +26,13 @@ const routes: Routes = [
   },
   {
     path: 'skills',
-    loadChildren: () => import('./public/skills/skills.module').then(mod => mod.SkillsModule)
-    // canActivate: [LoginGuard],
+    loadChildren: () => import('./public/skills/skills.module').then(mod => mod.SkillsModule),
+    canActivate: [VerifyTokenGuard]
+  },
+  {
+    path: 'testimonials',
+    loadChildren: () => import('./public/testimonials/testimonials.module').then(mod => mod.TestimonialsModule),
+    //canActivate: [VerifyTokenGuard]
   },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
 ];

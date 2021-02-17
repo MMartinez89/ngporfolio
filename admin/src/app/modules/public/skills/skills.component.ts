@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { SkillListComponent } from './skill-list/skill-list.component';
 
 @Component({
   selector: 'app-skills',
@@ -7,12 +7,12 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./skills.component.scss']
 })
 export class SkillsComponent implements OnInit {
-
-  constructor(
-
-  ) { }
+  @ViewChild(SkillListComponent, {static:true}) skillList: SkillListComponent
+  constructor() { }
 
   ngOnInit(): void {
   }
-
+  handleSubmited() {
+    this.skillList.onLoadPage();
+  }
 }

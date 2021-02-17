@@ -9,6 +9,7 @@ import { User } from 'src/app/shared/models/user.model';
 import { LocalStorageService } from 'src/app/core/service/local-storage.service';
 import {SessionStorageService} from '../service/session-storage.service';
 import { environment } from '../../../environments/environment';
+import { SwalService } from '../service/swal.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +21,7 @@ export class AuthService {
     private httpService: HttpService,
     private lsService: LocalStorageService,
     private ssService: SessionStorageService,
+    private swalService: SwalService,
     private router: Router) {
      // this.url = urljoin(environment.apiUrl, '/api/auth');
      this.url = urljoin(environment.apiUrl, '/auth');
@@ -36,6 +38,29 @@ export class AuthService {
 
   //}
 
+  renewToken() {
+    const url = urljoin(this.url, '/renewtoken')
+    return this.httpService
+      .get(url)
+      .pipe(
+        map((response: any) => {
+          this.ssService.set('token', response.token)
+          return true;
+        }),
+        catchError(err => {
+          this.logout();
+          this.swalService.error(
+            ':(',
+            'No fue posible renovar el token',
+            'error'
+          );
+          return throwError(err);
+        })
+      )
+
+
+  }
+  
   login(user: Partial<User>, remember: boolean = false) {
     if (remember) {
       this.lsService.set('email', user.email);
@@ -85,6 +110,14 @@ export class AuthService {
   //     );
   // }
 
+  isLoggedIn() {
+    const isLogged = this.token.length > 5;
+    if (!isLogged)  {
+      return false;
+    } else {
+      return true;
+    }
+  }
   isAuth() {
   }
   saveStorage(id: number, token: string, user: User) {

@@ -1,0 +1,22 @@
+<mat-form-field>
+    <mat-select
+      [formControl]="comboCtrl"
+      placeholder="Selecciona una skill"
+      required
+      #categorySelect
+      (selectionChange)="onSelectionChange($event)"
+    >
+      <mat-option>
+        <ngx-mat-select-search
+          [formControl]="comboFilterCtrl"
+          placeholderLabel="Buscar skill"
+          [noEntriesFoundLabel]="'No hay resultados'"
+        ></ngx-mat-select-search>
+      </mat-option>
+  
+      <mat-option *ngFor="let c of filteredData | async" [value]="c.id">
+        {{ c.name }}
+      </mat-option>
+    </mat-select>
+    <mat-error>requerido</mat-error>
+  </mat-form-field>

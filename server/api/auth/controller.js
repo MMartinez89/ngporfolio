@@ -40,5 +40,13 @@ class AuthController {
                 res.status(400).json({ message: 'issues trying to connect to database' + err })
             })
     }
+
+    static RenewToken(req, res) {
+        const token = jwt.sign({ user: req.user }, SEED, { expiresIn: 14400 });
+        res.status(200).json({
+          ok: true,
+          token,
+        });
+    }
 }
 export default AuthController

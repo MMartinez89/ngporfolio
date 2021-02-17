@@ -10,6 +10,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 
 const modules = [
   MatButtonModule,
@@ -19,8 +21,8 @@ const modules = [
   MatIconModule,
   MatInputModule,
   MatSlideToggleModule,
-  MatSelectModule
-
+  MatSelectModule,
+  NgxMatSelectSearchModule,
 ];
 @NgModule({
   imports: modules,
