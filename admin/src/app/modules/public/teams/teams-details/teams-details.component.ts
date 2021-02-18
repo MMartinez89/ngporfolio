@@ -1,70 +1,70 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { HttpService } from '@core/service/http.service';
-import urljoin from 'url-join';
+import { Teams } from '@shared/models/teams.model';
+import {SwalService} from '@core/service/swal.service';
+import {TeamsService} from '../teams.service'
 import { environment } from '@env';
-import { SwalService } from '@core/service/swal.service';
-import { Skill } from '@shared/models/skill.model';
+import urljoin from 'url-join';
 import * as _ from 'lodash';
-import { SkillsService } from '../skills.service';
 
 @Component({
-  selector: 'app-skill-detail',
-  templateUrl: './skill-detail.component.html',
-  styleUrls: ['./skill-detail.component.scss']
+  selector: 'app-teams-details',
+  templateUrl: './teams-details.component.html',
+  styleUrls: ['./teams-details.component.scss']
 })
-export class SkillDetailComponent implements OnInit {
+export class TeamsDetailsComponent implements OnInit {
+
   form: FormGroup;
   url: string;
-  @Input() skill: Skill;
+  @Input() teams: Teams;
   @Output() submited = new EventEmitter();
   validationType = {
     name: [Validators.required],
   }
   constructor(
     private swalService: SwalService,
-    private skillsService: SkillsService,
+    private teamsService: TeamsService
   ) {
-    this.url = urljoin(environment.apiUrl, 'skill');
+    this.url = urljoin(environment.apiUrl, 'team');
     this.createForm();
-    skillsService.sendSkillSubjectObservable.subscribe(skill => {
-      this.populateForm(skill);
+    teamsService.sendTeamsSubjectObservable.subscribe(teams => {
+      this.populateForm(teams);
     })
-  }
+   }
 
   ngOnInit(): void {
-
   }
+
   onClear(): void {
     this.form.reset();
   }
+
   createForm() {
     this.form = new FormGroup({
       id: new FormControl(null),
-      ParentId: new FormControl(null),
-      name: new FormControl(null, Validators.required),
-      active: new FormControl(true),
+      firstname: new FormControl(null),
+      lastname: new FormControl(null, Validators.required),
+      title: new FormControl(null),
+      description: new FormControl(null),
+      photo: new FormControl(null)
     });
   }
 
-  getErrorMessageForName() {
-    return this.form.get('name').hasError('required') ? 'requerido' : '';
-  }
   onSubmit() {
     debugger;
     if (this.form.valid) {
       if (!this.form.get('id').value) {
-        this.skillsService.post<SkillsService>(this.url, this.form.value).subscribe(skill => {
-          this.swalService.success('Atención', 'El skill ha sido creado');
+        this.teamsService.post<TeamsService>(this.url, this.form.value).subscribe(teams => {
+          debugger;
+          this.swalService.success('Atención', 'El equipos ha sido creado');
           this.submited.emit();
           this.resetForm();
         }, err => {
           this.swalService.error('Atención', `:: ${err}`);
         });
       } else {
-        this.skillsService.put<SkillsService>(this.url, this.form.value).subscribe(skill => {
-          this.swalService.success('Atención', 'El skill ha sido actualizado');
+        this.teamsService.put<TeamsService>(this.url, this.form.value).subscribe(teams => {
+          this.swalService.success('Atención', 'El equipos ha sido actualizado');
           this.submited.emit();
       }, err => {
           this.swalService.error('Atención', `:: ${err}`);
@@ -73,6 +73,7 @@ export class SkillDetailComponent implements OnInit {
     }
   }
   resetForm() {
+    debugger;
     this.form.reset(
       { active: true },
       { emitEvent: false }
@@ -94,21 +95,25 @@ export class SkillDetailComponent implements OnInit {
     this.setValidators();
     this.form.get('name').updateValueAndValidity();
   }
+
   setValidators() {
     this.form.get('name').setValidators(this.validationType.name);
   }
-  populateForm(skill) {
+
+  populateForm(teams) {
     // this.form.get('id').setValue(data.id);
     // this.form.get('rolename').setValue(data.rolename);
     // this.form.get('description').setValue(data.description);
     // Mejor manera de setear valores
     // this.form.setValue(_.omit(data, ['createdAt', 'updatedAt', 'deletedAt']));
-    this.skillsService
-      .getSingle<Skill>(this.url, skill.id)
-      .subscribe((skill: Skill) => {
+    this.teamsService
+      .getSingle<Teams>(this.url, teams.id)
+      .subscribe((teams: Teams) => {
         // const { skill } = data;
-        this.form.setValue(_.omit(skill, ['createdAt', 'updatedAt', 'deletedAt']));
+        this.form.setValue(_.omit(teams, ['createdAt', 'updatedAt', 'deletedAt']));
       });
 
   }
+
+
 }

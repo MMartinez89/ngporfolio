@@ -8,12 +8,14 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TokenInterceptor } from './core/interceptors/token.interceptor';
+//import { TeamsComponent } from './modules/public/teams/teams.component';
 //import { PagesComponent } from './modules/pages.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    //TeamsComponent,
   ],
   imports: [
     BrowserModule,

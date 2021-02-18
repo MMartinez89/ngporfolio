@@ -75,10 +75,10 @@ class TestimonialsController {
             })
     }
     static Update(req, res) {
-        db.Testimonilas.update(req.body, {
+        db.Testimonials.update(req.body, {
                 where: { id: req.body.id },
             })
-            .then((testimonials) => {
+            .then((testimonial) => {
                 res.status(201).json({
                     ok: true,
                 });
