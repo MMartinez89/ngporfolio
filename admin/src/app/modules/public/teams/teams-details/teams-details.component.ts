@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 })
 export class TeamsDetailsComponent implements OnInit {
 
+  files: File[] = [];
   form: FormGroup;
   url: string;
   @Input() teams: Teams;
@@ -54,6 +55,7 @@ export class TeamsDetailsComponent implements OnInit {
     debugger;
     if (this.form.valid) {
       if (!this.form.get('id').value) {
+        this.form.value.photo = this.files[0].name;
         this.teamsService.post<TeamsService>(this.url, this.form.value).subscribe(teams => {
           debugger;
           this.swalService.success('Atención', 'El equipos ha sido creado');
@@ -99,7 +101,18 @@ export class TeamsDetailsComponent implements OnInit {
   setValidators() {
     this.form.get('name').setValidators(this.validationType.name);
   }
+//
+  onSelect(event) {
+    console.log(event);
+    this.files.push(...event.addedFiles);
 
+  }
+  
+  onRemove(event) {
+    console.log(event);
+    this.files.splice(this.files.indexOf(event), 1);
+  }
+//
   populateForm(teams) {
     // this.form.get('id').setValue(data.id);
     // this.form.get('rolename').setValue(data.rolename);
